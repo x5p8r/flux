@@ -1,0 +1,5 @@
+export function startBackground(){const c=document.getElementById('bg');if(!c||matchMedia('(prefers-reduced-motion: reduce)').matches)return;const x=c.getContext('2d');if(!x)return;let w,H,P=[],raf;
+const init=()=>{w=c.width=innerWidth;H=c.height=innerHeight;const n=Math.min(70,Math.floor(w*H/(w<700?30000:20000)));P=Array.from({length:n},()=>({x:Math.random()*w,y:Math.random()*H,vx:(Math.random()-.5)*.25,vy:(Math.random()-.5)*.25}))};
+const f=()=>{x.clearRect(0,0,w,H);x.fillStyle='rgba(45,212,191,.6)';for(const p of P){p.x=(p.x+p.vx+w)%w;p.y=(p.y+p.vy+H)%H;x.fillRect(p.x,p.y,1.6,1.6)}
+for(let i=0;i<P.length;i++)for(let j=i+1;j<P.length;j++){const d=Math.hypot(P[i].x-P[j].x,P[i].y-P[j].y);if(d<120){x.strokeStyle=`rgba(56,189,248,${.15*(1-d/120)})`;x.beginPath();x.moveTo(P[i].x,P[i].y);x.lineTo(P[j].x,P[j].y);x.stroke()}}raf=requestAnimationFrame(f)};
+init();addEventListener('resize',init);document.addEventListener('visibilitychange',()=>{cancelAnimationFrame(raf);if(!document.hidden)f()});f()}
